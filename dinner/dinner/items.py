@@ -9,6 +9,16 @@ import scrapy
 
 
 class DinnerItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    dish_id = scrapy.Field()
+    name = scrapy.Field()
+    tags = scrapy.Field()
+    makefor = scrapy.Field()
+    author = scrapy.Field()
+    funs = scrapy.Field()
+    summary = scrapy.Field()
+    main_material = scrapy.Field()
+    assistant_material= scrapy.Field()
+    
+    
+    
+    
