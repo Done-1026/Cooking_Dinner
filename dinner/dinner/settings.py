@@ -66,6 +66,7 @@ ROBOTSTXT_OBEY = True
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'dinner.pipelines.DinnerPipeline': 300,
+    'dinner.pipelines.Sqlite3WritePipeline':400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -88,3 +89,15 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+#SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+
+#DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+
+#REDIS_START_URLS_AS_SET = True
+
+#REDIS_URL = 'redis://127.0.0.1:6379'
+
+#REDIS_HOST = 'localhost'
+
+#REDIS_PORT = '6379'

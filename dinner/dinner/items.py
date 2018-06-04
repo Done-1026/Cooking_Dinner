@@ -12,13 +12,13 @@ class DinnerItem(scrapy.Item):
     dish_id = scrapy.Field()
     name = scrapy.Field()
     tags = scrapy.Field()
-    makefor = scrapy.Field()
+    other = scrapy.Field()
     author = scrapy.Field()
     funs = scrapy.Field()
     summary = scrapy.Field()
-    main_material = scrapy.Field()
-    assistant_material= scrapy.Field()
-    
+    main_mate = scrapy.Field()
+    assis_mate= scrapy.Field()
+    procedure = scrapy.Field()
     
     
     

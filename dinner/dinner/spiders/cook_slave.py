@@ -3,14 +3,17 @@ import json
 import time
 
 from scrapy_redis.spiders import RedisSpider
-#from redis import Redis
+from redis import Redis
 from bs4 import BeautifulSoup
 
 from dinner.items import DinnerItem
 
-class CookbookSpider(scrapy.Spider):
+
+
+class CookbookSpider(RedisSpider):
     name = 'cookbook'
     allowed_domains = ['www.haodou.com']
+
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36',
                #'Host':'www.haodou.com',
                #'Connection':'keep-alive',
@@ -30,7 +33,8 @@ class CookbookSpider(scrapy.Spider):
 time&bigpage="+ str(bigpg) +"&smallpage=" + str(smallpg)
                 #末页的时候可能smallpage23无内容
                 yield scrapy.Request(url,headers=self.headers,callback=self.parse_url)
-                                           
+                
+                            
     def parse_url(self,response):
         '''获取每个菜的id，构建每个菜的url'''
         #print('开始')
