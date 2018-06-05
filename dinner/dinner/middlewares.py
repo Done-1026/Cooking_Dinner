@@ -4,8 +4,12 @@
 #
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
+import random
 
 from scrapy import signals
+
+from dinner.user_agents import agents
+
 
 
 class DinnerSpiderMiddleware(object):
@@ -54,3 +58,13 @@ class DinnerSpiderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class UserAgentDownloaderMiddleware(object):
+    def process_request(self,request,spider):
+        request.headers['User-Agent'] = random.choice(agents)
+        #print(request.headers)
+
+
+
+    

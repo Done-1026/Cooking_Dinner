@@ -13,19 +13,21 @@ class DinnerPipeline(object):
         self.ids_seen = set()
         
     def process_item(self, item, spider):
-        if item['dish_id'] in self.ids_seen:
+        if item['dish_id'][0] in self.ids_seen:
             raise DropItem("Duplicate item found:%s"%item)
         else:
-            self.ids_seen.add(item['dish_id'])
+            self.ids_seen.add(item['dish_id'][0])
             for k,v in item.items():
                 if k != 'dish_id':
                     item[k] = ','.join(v)
+                else:
+                    item[k] = v[0]
             return item
-
+'''
 class Sqlite3WritePipeline(object):
 
     def open_spider(self,spider):
-        self.conn = sqlite3.connect(r'D:\study\dinner\dinner\origin_data\origin.db')
+        self.conn = sqlite3.connect(r'..\origin_data\origin.db')
         self.curs = self.conn.cursor()
 
     def close_spider(self,spider):
@@ -41,5 +43,5 @@ class Sqlite3WritePipeline(object):
         except sqlite3.IntegrityError:
             raise DropItem("****%s,我们有这个菜了****"%item['name'])
         return item
-     
+  '''   
     

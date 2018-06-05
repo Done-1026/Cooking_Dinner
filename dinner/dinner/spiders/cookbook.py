@@ -7,6 +7,7 @@ from scrapy_redis.spiders import RedisSpider
 from bs4 import BeautifulSoup
 
 from dinner.items import DinnerItem
+from scrapy.contrib.loader import ItemLoader
 
 class CookbookSpider(scrapy.Spider):
     name = 'cookbook'
@@ -30,7 +31,7 @@ class CookbookSpider(scrapy.Spider):
 time&bigpage="+ str(bigpg) +"&smallpage=" + str(smallpg)
                 #末页的时候可能smallpage23无内容
                 yield scrapy.Request(url,headers=self.headers,callback=self.parse_url)
-                                           
+                                                           
     def parse_url(self,response):
         '''获取每个菜的id，构建每个菜的url'''
         #print('开始')
@@ -42,13 +43,19 @@ time&bigpage="+ str(bigpg) +"&smallpage=" + str(smallpg)
             yield scrapy.Request(url,headers=self.headers,meta=meta,callback=self.dishparse)
 
     def dishparse(self,response):
-        item = DinnerItem()
-        item['dish_id'] = response.meta['id']
-        large_info = response.xpath("//div[@class='large_info']")
-        item['name'] = large_info.xpath("./div[@class='box']/h1/text()").extract()
-        item['tags'] = large_info.xpath("./div[contains(@class,'mgt20')]//a/text()").extract()
-        item['other'] = large_info.xpath("./ul//li/text()").extract()
-        yield item
+        #item = DinnerItem()
+        #item['dish_id'] = response.meta['id']
+        #large_info = response.xpath("//div[@class='large_info']")
+        #item['name'] = large_info.xpath("./div[@class='box']/h1/text()").extract()
+        #item['tags'] = large_info.xpath("./div[contains(@class,'mgt20')]//a/text()").extract()
+        #item['other'] = large_info.xpath("./ul//li/text()").extract()
+
+        l = ItemLoader(item=DinnerItem(),response=response)
+        l.add_value('dish_id',response.meta['id'])
+        l.add_xpath('name',"//div[@class='large_info']/div[@class='box']/h1/text()")
+        l.add_xpath('tags',"//div[@class='large_info']/div[contains(@class,'mgt20')]//a/text()")
+        l.add_xpath('other',"//div[@class='large_info']/ul//li/text()")
+        return l.load_item()
         
         
         
