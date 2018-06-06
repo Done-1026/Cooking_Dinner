@@ -66,7 +66,7 @@ DOWNLOADER_MIDDLEWARES = {
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'dinner.pipelines.DinnerPipeline': 300,
-   # 'dinner.pipelines.Sqlite3WritePipeline':400,
+    'dinner.pipelines.Sqlite3WritePipeline':400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

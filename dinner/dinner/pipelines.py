@@ -23,7 +23,8 @@ class DinnerPipeline(object):
                 else:
                     item[k] = v[0]
             return item
-'''
+
+
 class Sqlite3WritePipeline(object):
 
     def open_spider(self,spider):
@@ -43,5 +44,5 @@ class Sqlite3WritePipeline(object):
         except sqlite3.IntegrityError:
             raise DropItem("****%s,我们有这个菜了****"%item['name'])
         return item
-  '''   
+   
     
