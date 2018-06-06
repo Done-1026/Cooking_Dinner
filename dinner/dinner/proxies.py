@@ -1,4 +1,5 @@
 import random
+import threading
 import json
 
 from bs4 import BeautifulSoup
@@ -6,43 +7,40 @@ import requests
 
 #from dinner.user_agents import agents
 from user_agents import agents
+from proxies_urls import proxies_urls
 
 class Proxies():
 
-    https_proxy = []
-    http_proxy = []
+    def __init__(self):
+        self.ips = set()
+        self.urls = proxies_urls
+        self.get_xc_proxies()
 
-    urls = {
-        'xc':{
-            'url':"http://www.xicidaili.com/nn/",
-            'pages':5,
-            }
-        }
-       
-    def create_soup(self,key):
+    def create_soups(self,key):
+        soups = []
         url_info = self.urls.get(key,None)
         if url_info:
-            for page in range(url_info['pages']+1):
+            for page in range(1,url_info['pages']+1):
                 headers ={
                     'User-Agent':random.choice(agents),
                     }
                 url = url_info['url'] + str(page)
-                resp = requests.get(url,headers=self.headers)
-                soup = BeautifulSoup(resp.content,'html.parser')
+                resp = requests.get(url,headers=headers)
+                soups.append(BeautifulSoup(resp.content,'html.parser'))
+            return soups
         else:
-            print("Non-existent!")
+            raise KeyError("Non-existent!")
 
-    def get_xc_proxies(self,soup):
-        soup = self.create_soup('xc')
-        tips = soup.find_all('tr')[0:]
-        for tip in tips:
-            if tip.find
-        
+    def get_xc_proxies(self):
+        soups = self.create_soups('xc')
+        for soup in soups:
+            td = threading.Thread(target=self.get_xc_ip,args=(soup,))
+            td.start()
 
-        
-    
-
-    
+    def get_xc_ip(self,soup):
+        for tr in soup.find_all('tr')[1:]:
+            ip = ':'.join(list(tr.stripped_strings)[:2])
+            self.ips.add(ip)
 
 a = Proxies()
-soup = a.create_soup(a.url)
+
