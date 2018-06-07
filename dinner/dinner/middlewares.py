@@ -9,7 +9,7 @@ import random
 from scrapy import signals
 
 from dinner.user_agents import agents
-
+from dinner.proxies import Proxies
 
 
 class DinnerSpiderMiddleware(object):
@@ -64,6 +64,15 @@ class UserAgentDownloaderMiddleware(object):
     def process_request(self,request,spider):
         request.headers['User-Agent'] = random.choice(agents)
         #print(request.headers)
+
+class ProxyDownloaderMiddleware(object):
+    def process_request(self,request,spider):
+        p = Proxies()
+        ip = random.choice(list(p.pool))
+        print(ip)
+        request.meta['proxy']='http://'+ip
+
+
 
 
 
