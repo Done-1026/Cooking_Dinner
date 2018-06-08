@@ -28,7 +28,8 @@ class DinnerPipeline(object):
 class Sqlite3WritePipeline(object):
 
     def open_spider(self,spider):
-        self.conn = sqlite3.connect(r'..\origin_data\origin.db')
+        self.conn = sqlite3.connect(r'.\origin_data\origin.db')
+        print("连接成功")
         self.curs = self.conn.cursor()
 
     def close_spider(self,spider):

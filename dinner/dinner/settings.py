@@ -54,7 +54,8 @@ COOKIES_ENABLED = False
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     'dinner.middlewares.UserAgentDownloaderMiddleware': 501,
-    'dinner.middlewares.ProxyDownloaderMiddleware':125
+    #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware':None,
+    'dinner.middlewares.ProxyDownloaderMiddleware':125,
 }
 
 # Enable or disable extensions

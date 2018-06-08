@@ -7,8 +7,7 @@ from bs4 import BeautifulSoup
 import requests
 
 # from dinner.user_agents import agents
-from dinner.user_agents import agents
-from dinner.proxies_urls import URLS
+from dinner.info import AGENTS,URLS
 
 
 class Proxies():
@@ -21,9 +20,6 @@ class Proxies():
         self.clear_pool()
         #self.etime = time.time()
 
-    def __repr__(self):
-        return self.pool
-
     def create_soups(self, key):
         '''根据代理ip页面，创建soup列表'''
         soups = []
@@ -31,7 +27,7 @@ class Proxies():
         if url_info:
             for page in range(1, url_info['pages'] + 1):
                 headers = {
-                    'User-Agent': random.choice(agents),
+                    'User-Agent': random.choice(AGENTS),
                 }
                 url = url_info['url'] + url_info['type'] + str(page)
                 resp = requests.get(url, headers=headers)
@@ -65,10 +61,7 @@ class Proxies():
             print(ip)
             self.pool.add(':'.join(ip))
         except:
-            print('connet error,drop ip.')
+            #print('connet error,drop ip.')
+            pass
 
-
-if __name__ == '__main__':
-    a = Proxies()
-    #print(a.etime-a.stime)
 

@@ -7,8 +7,9 @@
 import random
 
 from scrapy import signals
+import requests
 
-from dinner.user_agents import agents
+from dinner.info import AGENTS
 from dinner.proxies import Proxies
 
 
@@ -62,15 +63,31 @@ class DinnerSpiderMiddleware(object):
 
 class UserAgentDownloaderMiddleware(object):
     def process_request(self,request,spider):
-        request.headers['User-Agent'] = random.choice(agents)
+        request.headers['User-Agent'] = random.choice(AGENTS)
         #print(request.headers)
 
 class ProxyDownloaderMiddleware(object):
-    def process_request(self,request,spider):
+    def __init__(self):
+        self.refresh_pool()
+
+    def refresh_pool(self):
         p = Proxies()
-        ip = random.choice(list(p.pool))
-        print(ip)
-        request.meta['proxy']='http://'+ip
+        self.pool = list(p.pool)
+    
+    def process_request(self,request,spider):
+        ip = random.choice(self.pool)
+        request.meta['proxy'] = 'http://'+ip
+        print('request ip:',ip)
+        
+    def process_response(self,request,response,spider):
+        '''查看返回的状态码，如果不是200刚换ip重新请求'''
+        if response.status != 200:
+            ip = ranodm.choice(self.pool)
+            request.meta['proxy'] = 'http://'+ip
+            print('change request ip to:',ip)
+            return request
+        return response
+
 
 
 
