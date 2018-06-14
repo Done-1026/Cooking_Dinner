@@ -5,8 +5,10 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
+#import os
 import sqlite3
 from scrapy.exceptions import DropItem
+
 
 class DinnerPipeline(object):
     def __init__(self):
@@ -28,7 +30,7 @@ class DinnerPipeline(object):
 class Sqlite3WritePipeline(object):
 
     def open_spider(self,spider):
-        self.conn = sqlite3.connect(r'.\origin_data\origin.db')
+        self.conn = sqlite3.connect(r'..\origin_data\origin.db')
         print("连接成功")
         self.curs = self.conn.cursor()
 

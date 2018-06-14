@@ -66,25 +66,24 @@ class UserAgentDownloaderMiddleware(object):
         request.headers['User-Agent'] = random.choice(AGENTS)
         #print(request.headers)
 
-class ProxyDownloaderMiddleware(object):
-    def __init__(self):
-        self.refresh_pool()
 
-    def refresh_pool(self):
-        p = Proxies()
-        self.pool = list(p.pool)
+class ProxyDownloaderMiddleware(object):
+
+    def __init__(self):
+        self.pool = Proxies()
+        self.ip = random.choice(list(self.pool.pool))
+        
     
-    def process_request(self,request,spider):
-        ip = random.choice(self.pool)
-        request.meta['proxy'] = 'http://'+ip
-        print('request ip:',ip)
+    def process_request(self,request,spider):       
+        request.meta['proxy'] = 'https://' + self.ip
+        print('request ip:',self.ip)
         
     def process_response(self,request,response,spider):
         '''查看返回的状态码，如果不是200刚换ip重新请求'''
         if response.status != 200:
-            ip = ranodm.choice(self.pool)
-            request.meta['proxy'] = 'http://'+ip
-            print('change request ip to:',ip)
+            self.ip = ranodm.choice(list(self.pool.pool))
+            request.meta['proxy'] = 'https://' + self.ip
+            print('change request ip to:',self.ip)
             return request
         return response
 

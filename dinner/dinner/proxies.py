@@ -2,6 +2,7 @@ import random
 import threading
 import time
 import telnetlib
+import json
 
 from bs4 import BeautifulSoup
 import requests
@@ -13,11 +14,8 @@ from dinner.info import AGENTS,URLS
 class Proxies():
 
     def __init__(self):
-        self.threads = []
-        self.pool = set()
         #self.stime = time.time()
-        self.get_all_ips()
-        self.clear_pool()
+        self.refresh_pool()
         #self.etime = time.time()
 
     def create_soups(self, key):
@@ -43,19 +41,14 @@ class Proxies():
                 td = threading.Thread(target=self.check_save_ip, args=(ip,))
                 self.threads.append(td)
 
-    def get_all_ips(self):
-        self.get_xc_ip()
-
-    def clear_pool(self):
-        '''ip地址的抓取及验证，存入ips'''
+    def get_pool(self):
         for i in self.threads:
             i.start()
         for i in self.threads:
             i.join()
 
     def check_save_ip(self, ip):
-        '''对ip进行验证'''
-        # TODO:使用ip进行连接，判定是否可用，设定timeout
+        '''ip地址的抓取及验证，存入ips'''
         try:
             telnetlib.Telnet(ip[0], ip[1], timeout=2)
             print(ip)
@@ -63,5 +56,15 @@ class Proxies():
         except:
             #print('connet error,drop ip.')
             pass
+
+    def refresh_pool(self):
+        self.threads = []
+        self.pool = set()
+        self.get_xc_ip()
+
+        self.get_pool()
+        
+        
+        
 
 
